@@ -52,4 +52,229 @@ As an additional dimension the application should also allow to track their mood
 - Add reminders
 - Add mood tracking, display some basic visualisation on correlation of mood and success in adhering to habitutal behaviour
 - Add motivational quotes to database to be randomly displayed throughout app
+
+
+# API SPEC
+
+## Habits 
+
+![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `GET users/{userId}/habits`
+Return a list of all habits for a user
+
+Response
+```
+[
+  {
+    "id": 1,
+    "title": "Brush teeth"
+  },
+  {
+    "id": 2,
+    "title": "Run 2k"
+  }
+]
+```
+
+![#c5f015](https://placehold.co/15x15/c5f015/c5f015.png) `POST /users/{userId}/habits`
+Create a new habit
+
+Response
+```
+{
+  "id": 3,
+  "title": "Do the dishes"
+}
+```
+
+![#eda11c](https://placehold.co/15x15/eda11c/eda11c.png) `PUT /users/{userId}/habits/{habitId}`
+Update an existing habit
+
+Response
+```
+{
+  "id": 1,
+  "title": "Brush teeth and floss!"
+}
+```
+
+![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `DELETE /users/{userId}/habits/{habitId}`
+Delete a habit
+
+Response
+204 HTTP Code
+
+![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `GET /users/{userId}/habits/{habitId}`
+Return a habit detail
+
+Response
+```
+{
+  "id": 1,
+  "title": "Brush teeth",
+  "completed_for_today": false,
+  "completions": [
+    { "id": 1, "time_of_day": 1667749503 },
+    { "id": 2, "time_of_day": 1667749502 },
+    { "id": 3, "time_of_day": 1663449503 }
+  ],
+  "reminders": [
+   {
+     "id": 1,
+     "time_of_day": 1667749503
+   }
+}
+```
+
+## Habit completions 
+
+![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `GET /users/{userId}/habit/{habitId}/completions`
+Return all completions for a habit
+
+Response
+```
+[
+    { "id": 1, "time_of_day": 1667749503 },
+    { "id": 2, "time_of_day": 1667749502 },
+    { "id": 3, "time_of_day": 1663449504 },
+    { "id": 4, "time_of_day": 1667749505 },
+    { "id": 5, "time_of_day": 1667749506 },
+    { "id": 6, "time_of_day": 1663449507 },
+    { "id": 7, "time_of_day": 1667749508 },
+    { "id": 8, "time_of_day": 1667749509 },
+    { "id": 9, "time_of_day": 1663449511 }
+]
+```
+
+![#c5f015](https://placehold.co/15x15/c5f015/c5f015.png) `POST /users/{userId}/habits/{habitId}/completions`
+Create a new habit completion
+
+Response
+```
+{
+  "id": 1,
+  "time_of_day": 1667749503
+}
+```
+
+![#eda11c](https://placehold.co/15x15/eda11c/eda11c.png) `PUT /users/{userId}/habits/{habitId}/completions{completionId}`
+Update an existing habit completion
+
+Response
+```
+{
+  "id": 1,
+  "time_of_day": 1667749545
+}
+```
+
+![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `DELETE /users/{userId}/habits/{habitId}/completions/{completionId}`
+Delete a habit completion
+
+Response
+204 HTTP 
+
+## Habit reminders
+
+![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `GET users/{userId}/habit/{habitId}/reminders`
+Return reminders for a habit
+
+Response
+```
+[
+    { "id": 1, "time_of_day": 1667749503 },
+    { "id": 2, "time_of_day": 1667749502 }
+]
+```
+
+![#c5f015](https://placehold.co/15x15/c5f015/c5f015.png) `POST /users/{userId}/habits/reminders`
+Create a new habit reminder
+
+Response
+```
+{
+  "id": 1,
+  "time_of_day": 1667749503
+}
+```
+
+![#eda11c](https://placehold.co/15x15/eda11c/eda11c.png) `PUT /users/{userId}/habits/{habitId}/reminders{reminderId}`
+Update an existing habit reminder
+
+Response
+```
+{
+  "id": 1,
+  "time_of_day": 1667749545
+}
+```
+
+![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `DELETE /users/{userId}/habits/{habitId}/reminders/{reminderId}`
+Delete a habit reminder
+
+Response
+204 HTTP 
+
+## Users
+
+![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `GET users/{userId}`
+Return a user
+
+Response
+```
+{
+  "id": 1,
+  "username": "a_user",
+  "enabled": true
+}
+```
+
+![#c5f015](https://placehold.co/15x15/c5f015/c5f015.png) `POST /users`
+Create a new user
+
+Response
+```
+{
+  "id": 1,
+  "username": "a_user",
+  "enabled": true
+}
+```
+
+![#eda11c](https://placehold.co/15x15/eda11c/eda11c.png) `PUT /users/{userId}`
+Update a user
+
+Response
+```
+{
+  "id": 1,
+  "username": "b_user",
+  "enabled": true
+}
+```
+
+![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `DELETE /users/{userId}`
+Delete a user
+
+204 HTTP Code
+
+## User moods
+
+![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `GET users/{userId}/moods`
+Return a user's mood entries
+
+Response
+```
+[
+    { "id": 1, "time_of_day": 1667749503, "Happy" },
+    { "id": 2, "time_of_day": 1667749502, "Sad" }
+]
+```
+
+![#c5f015](https://placehold.co/15x15/c5f015/c5f015.png) `POST /users/{userId}/moods`
+Create a new user mood entry
+
+Response
+```
+{ "id": 1, "time_of_day": 1667749503, "Happy" }
+```
                 
