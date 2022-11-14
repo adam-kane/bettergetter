@@ -53,6 +53,10 @@ As an additional dimension the application should also allow to track their mood
 - Add mood tracking, display some basic visualisation on correlation of mood and success in adhering to habitutal behaviour
 - Add motivational quotes to database to be randomly displayed throughout app
 
+# ERD
+
+<img width="924" alt="image" src="https://user-images.githubusercontent.com/31001296/201695568-2a6f9e18-e909-47f5-b3c9-39b0b6c287db.png">
+
 
 # API SPEC
 
