@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:latest
+    container_name: better-getter_postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: bettergetter
+    volumes:
+      - db:/var/lib/postgresql/data
+  flyway:
+    image: flyway/flyway:9-alpine
+    container_name: better-getter_flyway
+    command: -url=jdbc:postgresql://db/postgres -schemas=public -user=admin
+      -password=bettergetter -connectRetries=5 migrate
+    volumes:
+      - ./migrations:/flyway/sql
+    depends_on:
+      - db
+  pgadmin:
+    image: dpage/pgadmin4:6.20
+    container_name: better-getter_pgadmin
+    ports:
+      - "8000:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pg.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - flyway
+volumes:
+  db:
+    name: better-getter_postgres
+  pgadmin:
+    name: better-getter_pgadmin
