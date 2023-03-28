@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import Dialog from "react-native-dialog";
 import Colors from "../constants/Colors";
-import { createNewCompletionForHabit } from "../networking/addHabitCompletion";
 import HabitCompletionEntry from "./HabitCompletionEntry";
 
 const HabitListItem = ({

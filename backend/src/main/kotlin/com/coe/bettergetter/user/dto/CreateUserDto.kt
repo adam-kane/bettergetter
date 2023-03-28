@@ -4,7 +4,7 @@ data class CreateUserDto(
     var email: String?,
     var firstName: String?,
     var lastName: String?,
-    var pass: String?
+    var password: String?
 ) {
 
 }

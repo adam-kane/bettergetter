@@ -5,7 +5,7 @@ create table if not exists "user"
     first_name varchar(255) not null,
     last_name varchar(255) not null,
     email varchar (255) not null,
-    pass varchar (255) not null
+    password varchar (255) not null
 );
 
 create table if not exists "habit"
@@ -18,16 +18,6 @@ create table if not exists "habit"
     user_id integer
         constraint habit_user_id_fkey references "user" ON DELETE CASCADE
 );
-
--- create table if not exists "user_habit"
--- (
---     id serial not null
---         constraint user_habit_pkey primary key,
---     user_id integer not null
---         constraint user_id_fkey references "user" ON DELETE CASCADE,
---     habit_id integer not null
---         constraint habit_id_fkey references "habit" ON DELETE CASCADE
--- );
 
 create table if not exists "reminder"
 (

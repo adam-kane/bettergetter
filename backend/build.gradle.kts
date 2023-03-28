@@ -1,5 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+}
 
 plugins {
 	id("org.springframework.boot") version "2.7.5"
@@ -24,6 +29,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("io.springfox:springfox-boot-starter:3.0.0")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation ("io.jsonwebtoken:jjwt:0.9.1")
 
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

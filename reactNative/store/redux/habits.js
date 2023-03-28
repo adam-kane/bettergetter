@@ -1,4 +1,5 @@
-import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Network from "../../constants/Network";
 import HabitCompletionSummary from "../../models/habitCompletionSummary";
 
@@ -10,6 +11,10 @@ const habitsSlice = createSlice({
     error: null,
   },
   reducers: {
+    fetchHabits: (state, action) => {
+      const habits = action.payload;
+      state.habits = habits;
+    },
     createNewHabit: (state, action) => {
       const { payload } = action;
       const habit = {
@@ -44,33 +49,44 @@ const habitsSlice = createSlice({
         completionsRequiredPerDay: action.payload.completionsRequiredPerDay,
       };
     },
-  },
-  extraReducers(builder) {
-    builder
-      .addCase(fetchHabits.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchHabits.fulfilled, (state, action) => {
-        state.habits.push(...action.payload);
-        state.status = "succeeded";
-      })
-      .addCase(fetchHabits.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
-      });
+    errorHandler: (state, action) => {
+      state.error = action.payload;
+      console.log(action.payload);
+    },
   },
 });
 
-export const fetchHabits = createAsyncThunk("habits/fetchHabits", async () => {
-  const response = await fetch(`${Network.baseUrl}/user/2/habit`);
-  return response.json();
-});
+export function fetchHabits() {
+  return async function fetchCompletionThunk(dispatch) {
+    const token = await AsyncStorage.getItem("token");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const response = await fetch(
+        `${Network.baseUrl}/user/2/habit`,
+        requestOptions
+      );
+      dispatch({ type: "habits/fetchHabits", payload: await response.json() });
+    } catch (e) {
+      dispatch({ type: "habits/errorHandler", payload: e.message });
+    }
+  };
+}
 
 export function createHabit(habit) {
   return async function saveCompletionThunk(dispatch) {
+    const token = await AsyncStorage.getItem("token");
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         ...habit,
       }),
@@ -90,9 +106,13 @@ export function createHabit(habit) {
 
 export function editHabit(habitId, habitDetails) {
   return async function saveCompletionThunk(dispatch) {
+    const token = await AsyncStorage.getItem("token");
     const requestOptions = {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         ...habitDetails,
       }),
@@ -112,9 +132,13 @@ export function editHabit(habitId, habitDetails) {
 
 export function addCompletionForHabit(habitId, date) {
   return async function saveCompletionThunk(dispatch, getState) {
+    const token = await AsyncStorage.getItem("token");
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         timeOfDay: date,
       }),
@@ -138,3 +162,4 @@ export default habitsSlice.reducer;
 export const selectAllUserHabits = (state) => state.habits.habits;
 export const selectHabitById = (state, habitId) =>
   state.habits.find((habit) => habit.id === habitId);
+export const habitsError = (state) => state.habits.error;

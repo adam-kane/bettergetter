@@ -14,6 +14,7 @@ import EmptyListState from "../components/EmptyListState";
 import PrimaryButton from "../components/PrimaryButton";
 import { fetchHabits, selectAllUserHabits } from "../store/redux/habits";
 import { randomRGB } from "../util/ColorUtil";
+import ErrorOverlay from "../components/ErrorOverlay";
 
 function Dashboard({ navigation }) {
   const habits = useSelector(selectAllUserHabits);
@@ -44,6 +45,10 @@ function Dashboard({ navigation }) {
       />
     );
   };
+
+  if (error) {
+    return <ErrorOverlay message={error} onConfirm={() => {}} />;
+  }
 
   return (
     <View style={styles.container}>

@@ -24,8 +24,8 @@ open class User {
     @Column(name = "email", nullable = false)
     open var email: String? = null
 
-    @Column(name = "pass", nullable = false)
-    open var pass: String? = null
+    @Column(name = "password", nullable = false)
+    open var password: String? = null
 
     @OneToMany(cascade = [CascadeType.ALL], targetEntity = Habit::class, mappedBy = "user")
     open var habits: MutableList<Habit>? = null
